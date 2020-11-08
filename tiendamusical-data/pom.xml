@@ -71,7 +71,6 @@
 	    <artifactId>hibernate-jpa-2.1-api</artifactId>
 	    <version>${hibernate-jpa-version}</version>
 	</dependency>
-	
   </dependencies>
 
   <build>
