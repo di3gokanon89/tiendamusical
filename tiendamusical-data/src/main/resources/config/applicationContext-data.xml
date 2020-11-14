@@ -64,5 +64,5 @@
 	
 	<!-- :::::::::::::::: ETIQUETA QUE PERMITE REGISTRAR LAS CLASES QUE SE ENCARGAN DE EJECUTAR LAS TRANSACCIONES A LA BASE DE DATOS (DAO) ::::::::: -->
 	
-	<jpa:repositories base-package="com.devpredator.tiendamusicaldata.repositories" entity-manager-factory-ref="emf"></jpa:repositories>
+	<jpa:repositories base-package="com.devpredator.tiendamusicaldata.dao" entity-manager-factory-ref="emf"></jpa:repositories>
 </beans>
