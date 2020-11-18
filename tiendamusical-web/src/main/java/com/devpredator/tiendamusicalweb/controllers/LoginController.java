@@ -52,6 +52,8 @@ public class LoginController {
 	 */
 	public void entrar() {
 		
+		
+		
 		Persona personaConsultada = this.loginServiceImpl.consultarUsuarioLogin(this.usuario, this.password);
 		
 		if (personaConsultada != null) {
