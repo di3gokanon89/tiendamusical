@@ -3,9 +3,11 @@
  */
 package com.devpredator.tiendamusicalweb.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -15,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.devpredator.tiendamusicalentities.dto.ArtistaAlbumDTO;
 import com.devpredator.tiendamusicalservices.service.HomeService;
+import com.devpredator.tiendamusicalweb.session.SessionBean;
+import com.devpredator.tiendamusicalweb.utils.CommonUtils;
 
 /**
  * @author DevPredator
@@ -42,6 +46,12 @@ public class HomeController {
 	@ManagedProperty("#{homeServiceImpl}")
 	private HomeService homeServiceImpl;
 	/**
+	 * Objeto que almacena informacion en sesion.
+	 */
+	@ManagedProperty("#{sessionBean}")
+	private SessionBean sessionBean;
+	
+	/**
 	 * Inicializando pantalla.
 	 */
 	@PostConstruct
@@ -62,6 +72,21 @@ public class HomeController {
 			this.artistasAlbumDTO.forEach( artistaAlbumDTO -> {
 				LOGGER.info("Artista: " + artistaAlbumDTO.getArtista().getNombre());
 			});
+		}
+	}
+	
+	/**
+	 * Metodo que permite ver el detalle del album seleccionado por el cliente.
+	 * @param artistaAlbumDTO {@link ArtistaAlbumDTO} objeto con el album seleccionado.
+	 */
+	public void verDetalleAlbum(ArtistaAlbumDTO artistaAlbumDTO) {
+		this.sessionBean.setArtistaAlbumDTO(artistaAlbumDTO);
+		try {
+			CommonUtils.redireccionar("/pages/cliente/detalle.xhtml");
+		} catch (IOException e) {
+			CommonUtils.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "¡UPS!", "Hubo un error de formato en la página a ingresar. "
+					+ "Favor de contactar con soporte.");
+			e.printStackTrace();
 		}
 	}
 	
@@ -100,5 +125,17 @@ public class HomeController {
 	 */
 	public void setHomeServiceImpl(HomeService homeServiceImpl) {
 		this.homeServiceImpl = homeServiceImpl;
+	}
+	/**
+	 * @return the sessionBean
+	 */
+	public SessionBean getSessionBean() {
+		return sessionBean;
+	}
+	/**
+	 * @param sessionBean the sessionBean to set
+	 */
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
 	}
 }
