@@ -18,11 +18,11 @@ import com.devpredator.tiendamusicalservices.service.LoginService;
 public class LoginServiceImpl implements LoginService {
 
 	@Autowired
-	private PersonaDAO personaDAOImpl;
+	private PersonaDAO personaDAO;
 	
 	@Override
 	public Persona consultarUsuarioLogin(String usuario, String password) {
-		return this.personaDAOImpl.findByUsuarioAndPassword(usuario, password);
+		return this.personaDAO.findByUsuarioAndPassword(usuario, password);
 	}
 
 }
