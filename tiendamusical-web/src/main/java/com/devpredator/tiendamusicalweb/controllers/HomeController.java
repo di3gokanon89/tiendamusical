@@ -16,6 +16,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.devpredator.tiendamusicalentities.dto.ArtistaAlbumDTO;
+import com.devpredator.tiendamusicalentities.entities.CarritoAlbum;
+import com.devpredator.tiendamusicalservices.service.CarritoService;
 import com.devpredator.tiendamusicalservices.service.HomeService;
 import com.devpredator.tiendamusicalweb.session.SessionBean;
 import com.devpredator.tiendamusicalweb.utils.CommonUtils;
@@ -45,6 +47,11 @@ public class HomeController {
 	 */
 	@ManagedProperty("#{homeServiceImpl}")
 	private HomeService homeServiceImpl;
+	/**
+	 * Se inyecta el objeto de spring con jsf para obtener los metodos de logica de negocio del carrito.
+	 */
+	@ManagedProperty("#{carritoServiceImpl}")
+	private CarritoService carritoServiceImpl;
 	/**
 	 * Objeto que almacena informacion en sesion.
 	 */
@@ -88,6 +95,17 @@ public class HomeController {
 					+ "Favor de contactar con soporte.");
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * Metodo que permite agregar un album en el carrito de compras.
+	 * @param artistaAlbumDTO {@link ArtistaAlbumDTO} album a agregar al carrito.
+	 */
+	public void agregarAlbumCarrito(ArtistaAlbumDTO artistaAlbumDTO) {
+		LOGGER.info("Agregando album: " + artistaAlbumDTO.getAlbum().getNombre());
+		
+		CarritoAlbum carritoAlbum = this.carritoServiceImpl.guardarAlbumsCarrito(artistaAlbumDTO, this.sessionBean.getPersona().getCarrito(), 1);
+		
+		this.sessionBean.getPersona().getCarrito().getCarritosAlbum().add(carritoAlbum);
 	}
 	
 	/**
@@ -137,5 +155,17 @@ public class HomeController {
 	 */
 	public void setSessionBean(SessionBean sessionBean) {
 		this.sessionBean = sessionBean;
+	}
+	/**
+	 * @return the carritoServiceImpl
+	 */
+	public CarritoService getCarritoServiceImpl() {
+		return carritoServiceImpl;
+	}
+	/**
+	 * @param carritoServiceImpl the carritoServiceImpl to set
+	 */
+	public void setCarritoServiceImpl(CarritoService carritoServiceImpl) {
+		this.carritoServiceImpl = carritoServiceImpl;
 	}
 }

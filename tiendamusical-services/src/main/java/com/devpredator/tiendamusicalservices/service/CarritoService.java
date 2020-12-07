@@ -3,9 +3,12 @@
  */
 package com.devpredator.tiendamusicalservices.service;
 
+import java.util.List;
+
 import com.devpredator.tiendamusicalentities.dto.ArtistaAlbumDTO;
 import com.devpredator.tiendamusicalentities.entities.Carrito;
 import com.devpredator.tiendamusicalentities.entities.CarritoAlbum;
+import com.devpredator.tiendamusicalentities.entities.Factura;
 
 /**
  * @author DevPredator
@@ -36,4 +39,12 @@ public interface CarritoService {
 	 * @param carrito {@link Carrito} objeto con el carrito de compras del usuario.
 	 */
 	float actualizarAlbumCantidad(CarritoAlbum carritoAlbum, Carrito carrito);
+	/**
+	 * Metodo que permite actualizar los registros de los productos comprados por el cliente agregandoles la orden de compra
+	 * y actualizando su estatus a PAGADO.
+	 * @param carritoAlbums {@link List} lista de productos en el carrito a actualizar.
+	 * @param factura {@link Factura} objeto con la factura y la orden de compra.
+	 * @return {@link Boolean} estatus de la actualizacion del carrito.
+	 */
+	boolean actualizarCarritoAlbum(List<CarritoAlbum> carritoAlbums, Factura factura);
 }

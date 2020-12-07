@@ -62,7 +62,7 @@
 													<p:ajax event="change" listener="#{carritoController.actualizarCantidadCarrito(carritoAlbum)}" update="formCarrito:pnlTotalCompra, formCarrito:dataViewDetalleCarrito"></p:ajax>
 								                </p:selectOneMenu>
 								                
-								                <p:commandButton icon="pi pi-trash" style="background-color: red; border:none" action="#{carritoController.eliminarAlbumCarrito(carritoAlbum)}" update="formCarrito:menubar, formCarrito:dataViewDetalleCarrito, formCarrito:pnlTotalCompra">
+								                <p:commandButton icon="pi pi-trash" style="background-color: red; border:none" action="#{carritoController.eliminarAlbumCarrito(carritoAlbum)}" update="formCarrito:menubar, formCarrito:dataViewDetalleCarrito, formCarrito:pnlTotalCompra, formCarrito:pnlBotonContinuar">
 								                	<p:confirm header="Confirmar" message="¿Estás seguro de eliminar el producto #{carritoAlbum.album.nombre}?" icon="pi pi-exclamation-triangle" />
 								                </p:commandButton>
 								 
@@ -84,7 +84,7 @@
 								    	</p:outputLabel>
 								    </p:panelGrid>
 								    
-								    <p:panelGrid columns="5" columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-2, ui-g-12 ui-md-2, logo, detail" layout="grid" style="width:100%; text-align:center; background-color: black; border: none">
+								    <p:panelGrid id="pnlBotonContinuar" columns="5" columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-2, ui-g-12 ui-md-2, logo, detail" layout="grid" style="width:100%; text-align:center; background-color: black; border: none">
 								    	<p:outputLabel></p:outputLabel>
 								    	<p:outputLabel></p:outputLabel>
 								    	<p:outputLabel></p:outputLabel>
