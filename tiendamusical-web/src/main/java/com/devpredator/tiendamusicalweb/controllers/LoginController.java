@@ -4,6 +4,7 @@
 package com.devpredator.tiendamusicalweb.controllers;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +29,12 @@ import com.devpredator.tiendamusicalweb.utils.CommonUtils;
  */
 @ManagedBean
 @ViewScoped
-public class LoginController {
+public class LoginController implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6447174081691377315L;
 	/**
 	 * Objeto que permite mostrar los mensajes de LOG en la consola del servidor o en un archivo externo.
 	 */

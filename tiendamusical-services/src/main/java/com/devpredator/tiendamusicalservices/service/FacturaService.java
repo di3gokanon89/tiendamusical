@@ -3,6 +3,8 @@
  */
 package com.devpredator.tiendamusicalservices.service;
 
+import java.util.List;
+
 import com.devpredator.tiendamusicalentities.entities.Factura;
 import com.devpredator.tiendamusicalentities.entities.Persona;
 import com.paypal.orders.Order;
@@ -19,4 +21,10 @@ public interface FacturaService {
 	 * @param persona {@link Persona} objeto con la informacion de la persona a la que se le asigna la factura.
 	 */
 	Factura guardarFactura(Factura factura, Order order, Persona persona);
+	/**
+	 * Metodo que permite consultar las facturas de la persona
+	 * @param persona {@link Persona} objeto que contiene la persona en sesion.
+	 * @return {@link Factura} lista de facturas de la persona.
+	 */
+	List<Factura> consultarFacturasPersona(Persona persona);
 }

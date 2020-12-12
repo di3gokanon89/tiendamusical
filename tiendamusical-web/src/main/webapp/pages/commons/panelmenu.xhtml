@@ -8,8 +8,8 @@
 	    <p:panelMenu style="width:100%">
 
 	        <p:submenu label="Mi Perfil" rendered="true" expanded="true">
-	            <p:menuitem value="Información General" icon="pi pi-user-edit" />
-	            <p:menuitem value="Mis compras" icon="pi pi-shopping-cart" />
+	            <p:menuitem value="Información General" icon="pi pi-user-edit" action="#{paginaController.redireccionarPagina('/pages/cliente/infopersonal.xhtml')}" immediate="true"/>
+	            <p:menuitem value="Mis compras" icon="pi pi-shopping-cart" action="#{paginaController.redireccionarPagina('/pages/cliente/miscompras.xhtml')}" immediate="true"/>
 	        </p:submenu>
 
 	        <p:submenu label="Administración" rendered="false">

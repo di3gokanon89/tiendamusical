@@ -4,6 +4,7 @@
 package com.devpredator.tiendamusicalservices.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,11 @@ public class FacturaServiceImpl implements FacturaService {
 		factura.setPersona(persona);
 		
 		return this.facturaDAO.save(factura);
+	}
+
+	@Override
+	public List<Factura> consultarFacturasPersona(Persona persona) {
+		return this.facturaDAO.findAllByPersona(persona);
 	}
 
 }
