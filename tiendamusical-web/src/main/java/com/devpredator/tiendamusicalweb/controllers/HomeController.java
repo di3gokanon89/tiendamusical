@@ -4,7 +4,11 @@
 package com.devpredator.tiendamusicalweb.controllers;
 
 import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -14,11 +18,22 @@ import javax.faces.bean.ViewScoped;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.axes.cartesian.CartesianScales;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
+import org.primefaces.model.charts.bar.BarChartDataSet;
+import org.primefaces.model.charts.bar.BarChartModel;
+import org.primefaces.model.charts.bar.BarChartOptions;
+import org.primefaces.model.charts.optionconfig.title.Title;
 
+import com.devpredator.tiendamusicalentities.dto.AlbumTopTenDTO;
 import com.devpredator.tiendamusicalentities.dto.ArtistaAlbumDTO;
 import com.devpredator.tiendamusicalentities.entities.CarritoAlbum;
+import com.devpredator.tiendamusicalservices.service.AlbumService;
 import com.devpredator.tiendamusicalservices.service.CarritoService;
 import com.devpredator.tiendamusicalservices.service.HomeService;
+import com.devpredator.tiendamusicalweb.enums.ColorEnum;
 import com.devpredator.tiendamusicalweb.session.SessionBean;
 import com.devpredator.tiendamusicalweb.utils.CommonUtils;
 
@@ -59,6 +74,16 @@ public class HomeController {
 	private SessionBean sessionBean;
 	
 	/**
+	 * Objeto que permitira generar el modelo para mostrar la grafica del albums top ten vendidos.
+	 */
+	private BarChartModel barChartModel;
+	/**
+	 * Objeto que contiene la logica de negocio para los albums.
+	 */
+	@ManagedProperty("#{albumServiceImpl}")
+	private AlbumService albumServiceImpl;
+	
+	/**
 	 * Inicializando pantalla.
 	 */
 	@PostConstruct
@@ -67,6 +92,10 @@ public class HomeController {
 		LOGGER.warn("WARN");
 		LOGGER.error("ERROR");
 		LOGGER.fatal("FATAL");
+		
+		if (this.sessionBean.getPersona().getRol().getIdRol() == 3) {
+			this.crearGraficaTopTenAlbumsVendidos();
+		}
 	}
 	/**
 	 * Metodo que permite obtener los albums de los artistas encontrados en la base de datos
@@ -106,6 +135,81 @@ public class HomeController {
 		CarritoAlbum carritoAlbum = this.carritoServiceImpl.guardarAlbumsCarrito(artistaAlbumDTO, this.sessionBean.getPersona().getCarrito(), 1);
 		
 		this.sessionBean.getPersona().getCarrito().getCarritosAlbum().add(carritoAlbum);
+	}
+	/**
+	 * Metodo que permite generar y mostrar la grafica de top ten de albums vendidos para el administrador.
+	 */
+	public void crearGraficaTopTenAlbumsVendidos() {
+		
+		this.barChartModel = new BarChartModel();
+		ChartData chartData = new ChartData();
+		
+		//Se consulta la informacion de los albums mas vendidos.
+		List<AlbumTopTenDTO> albumsTopTen = this.albumServiceImpl.consultarAlbumsTopTen();
+		
+		String[] meses = new DateFormatSymbols().getMonths();
+		
+		//Se itera la lista de albums topten y se integran los valores a la grafica.
+		for (int i = 0; i < albumsTopTen.size(); i++) {
+			
+			BarChartDataSet barChartDataSet = new BarChartDataSet();
+			barChartDataSet.setLabel(albumsTopTen.get(i).getCarritoAlbum().getAlbum().getNombre());
+			barChartDataSet.setBackgroundColor(ColorEnum.values()[i].getDescripcion());
+			barChartDataSet.setBorderWidth(1);
+			
+			List<Number> numeros = new ArrayList<Number>();
+			
+			//Se obtiene el mes en el que se realizo la compra del album.
+			String mesCompra = albumsTopTen.get(i).getCarritoAlbum().getFechaCompra()
+					.getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "MX"));
+			
+			for (int j = 0; j < meses.length; j++) {
+				String mes = meses[j];
+				
+				if (mes.equals(mesCompra)) {
+					numeros.add(albumsTopTen.get(i).getCantidadSuma());
+				} else {
+					numeros.add(0);
+				}
+			}
+			
+			barChartDataSet.setData(numeros);
+			chartData.addChartDataSet(barChartDataSet);
+		}
+		
+		List<String> etiquetasMeses = new ArrayList<String>();
+		etiquetasMeses.add("Enero");
+		etiquetasMeses.add("Febrero");
+		etiquetasMeses.add("Marzo");
+		etiquetasMeses.add("Abril");
+		etiquetasMeses.add("Mayo");
+		etiquetasMeses.add("Junio");
+		etiquetasMeses.add("Julio");
+		etiquetasMeses.add("Agosto");
+		etiquetasMeses.add("Septiembre");
+		etiquetasMeses.add("Octubre");
+		etiquetasMeses.add("Noviembre");
+		etiquetasMeses.add("Diciembre");
+		
+		chartData.setLabels(etiquetasMeses);
+		this.barChartModel.setData(chartData);
+
+		BarChartOptions barChartOptions = new BarChartOptions();
+		CartesianScales cartesianScales = new CartesianScales();
+		CartesianLinearAxes cartesianLinearAxes = new CartesianLinearAxes();
+		CartesianLinearTicks cartesianLinearTicks = new CartesianLinearTicks();
+		
+		cartesianLinearTicks.setBeginAtZero(true);
+		cartesianLinearAxes.setTicks(cartesianLinearTicks);
+		cartesianScales.addYAxesData(cartesianLinearAxes);
+		barChartOptions.setScales(cartesianScales);
+		
+		Title title = new Title();
+		title.setDisplay(true);
+		title.setText("Top 10 Albums más vendidos por mes");
+		barChartOptions.setTitle(title);
+		
+		this.barChartModel.setOptions(barChartOptions);
 	}
 	
 	/**
@@ -167,5 +271,29 @@ public class HomeController {
 	 */
 	public void setCarritoServiceImpl(CarritoService carritoServiceImpl) {
 		this.carritoServiceImpl = carritoServiceImpl;
+	}
+	/**
+	 * @return the barChartModel
+	 */
+	public BarChartModel getBarChartModel() {
+		return barChartModel;
+	}
+	/**
+	 * @param barChartModel the barChartModel to set
+	 */
+	public void setBarChartModel(BarChartModel barChartModel) {
+		this.barChartModel = barChartModel;
+	}
+	/**
+	 * @return the albumServiceImpl
+	 */
+	public AlbumService getAlbumServiceImpl() {
+		return albumServiceImpl;
+	}
+	/**
+	 * @param albumServiceImpl the albumServiceImpl to set
+	 */
+	public void setAlbumServiceImpl(AlbumService albumServiceImpl) {
+		this.albumServiceImpl = albumServiceImpl;
 	}
 }

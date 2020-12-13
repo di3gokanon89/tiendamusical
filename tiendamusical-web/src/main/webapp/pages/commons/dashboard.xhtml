@@ -24,10 +24,16 @@
 						<div class="p-grid">
 							<div class="p-col-12">
 								
-								<!-- ::::::::::: PANTALLAS DEL CLIENTE ::::::::::::  -->
+								<!-- ::::::::::: PANTALLA DEL CLIENTE ::::::::::::  -->
 								
 								<c:if test="#{sessionBean.persona.rol.idRol == 4}">
 									<ui:include src="/pages/cliente/home.xhtml"></ui:include>							
+								</c:if>
+								
+								<!-- ::::::::::: PANTALLA DEL ADMINISTRADOR :::::::: -->
+								
+								<c:if test="#{sessionBean.persona.rol.idRol == 3}">
+									<ui:include src="/pages/admin/home.xhtml"></ui:include>							
 								</c:if>
 								
 							</div>
