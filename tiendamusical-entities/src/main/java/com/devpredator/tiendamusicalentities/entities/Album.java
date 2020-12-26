@@ -19,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "album")
-public class Album {
+public class Album extends Common {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Album {
 	@Column(name = "imagen", length = 100, nullable = false)
 	private String imagen;
 	
-	@Column(name = "descripcion", nullable = false)
+	@Column(name = "descripcion")
 	private String descripcion;
 	
 	@Column(name = "anio", nullable = false)

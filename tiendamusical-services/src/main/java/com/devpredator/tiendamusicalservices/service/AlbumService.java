@@ -6,6 +6,7 @@ package com.devpredator.tiendamusicalservices.service;
 import java.util.List;
 
 import com.devpredator.tiendamusicalentities.dto.AlbumTopTenDTO;
+import com.devpredator.tiendamusicalentities.entities.Album;
 
 /**
  * @author DevPredator
@@ -17,4 +18,9 @@ public interface AlbumService {
 	 * @return {@link List} lista de top ten albums vendidos
 	 */
 	List<AlbumTopTenDTO> consultarAlbumsTopTen();
+	/**
+	 * Metodo que permite consultar el listado de albums.
+	 * @return {@link List} lista de albums consultados.
+	 */
+	List<Album> consultarAlbums();
 }
