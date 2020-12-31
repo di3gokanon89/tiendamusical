@@ -18,7 +18,8 @@
       <h:body style="background-color: black">
       	<div class="ui-fluid">
 			<h:form id="formPerfiles">
-			
+				<ui:include src="/pages/commons/loading.xhtml"></ui:include>
+				
 				<p:growl id="messages" showSummary="true" showDetail="true" skipDetailIfEqualsSummary="true"></p:growl>
 			
 				<ui:include src="/pages/commons/navbar.xhtml"></ui:include>
@@ -36,7 +37,7 @@
 									<p:commandButton oncomplete="PF('dlgPerfil').show()" value="Agregar" action="#{adminPerfilesController.limpiarComponentes}" immediate="true" update="formAddUpdatePerfil:pblPerfiles"></p:commandButton>							
 								</div>
 								
-								<p:dataTable id="tblPerfiles" rows="20" paginator="true" emptyMessage="No se encontraron registros de perfiles..." 
+								<p:dataTable id="tblPerfiles" widgetVar="tblPerfiles" rows="20" paginator="true" emptyMessage="No se encontraron registros de perfiles..." 
 											 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							                 currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros" filteredValue="#{adminPerfilesController.perfilesFiltrados}"
 							                 rowsPerPageTemplate="20,50,100" var="perfil" value="#{adminPerfilesController.perfiles}" paginatorPosition="bottom">
@@ -54,9 +55,17 @@
 										<p:outputLabel value="#{perfil.fechaCreacion}" converter="localDateTimeConverter"></p:outputLabel>
 									</p:column>
 									
-									<p:column headerText="Estatus" filterBy="#{perfil.estatus}" filterMatchMode="contains">
-											<p:outputLabel value="HABILITADO" rendered="#{perfil.estatus}"></p:outputLabel>
-											<p:outputLabel value="NO HABILITADO" rendered="#{!perfil.estatus}"></p:outputLabel>
+									<p:column headerText="Estatus" filterBy="#{perfil.estatus}" filterMatchMode="exact">
+									     <f:facet name="filter">
+							                <p:selectOneMenu onchange="PF('tblPerfiles').filter()">
+							                    <f:selectItem itemLabel="SELECCIONE" itemValue="#{null}" noSelectionOption="true" />
+							                    <f:selectItem itemLabel="NO HABILITADO" itemValue="false"></f:selectItem>
+							                    <f:selectItem itemLabel="HABILITADO" itemValue="true"></f:selectItem>
+							                </p:selectOneMenu>
+							            </f:facet>
+							            
+										<p:outputLabel value="HABILITADO" rendered="#{perfil.estatus}"></p:outputLabel>
+										<p:outputLabel value="NO HABILITADO" rendered="#{!perfil.estatus}"></p:outputLabel>
 									</p:column>
 									
 									<p:column headerText="Actualizar">
@@ -77,9 +86,7 @@
 						
 			<p:dialog id="dlgPerfil" header="Agregar o actualizar perfil" widgetVar="dlgPerfil" modal="true" responsive="true" resizable="false" width="50%">
 			
-					<h:form id="formAddUpdatePerfil">
-			
-								    
+					<h:form id="formAddUpdatePerfil">								    
 								    <p:panelGrid id="pblPerfiles" columns="1" layout="grid" styleClass="ui-panelgrid-blank" columnClasses="ui-g-12">
 								    	
 								    	<p:outputLabel id="lblNombre" value="Nombre: " for="txtNombre"></p:outputLabel>

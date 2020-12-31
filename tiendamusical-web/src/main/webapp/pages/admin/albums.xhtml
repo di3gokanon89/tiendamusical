@@ -36,7 +36,7 @@
 									<p:commandButton oncomplete="PF('dlgAlbums').show()" value="Agregar" action="#{adminAlbumsController.limpiarComponentes}" immediate="true" update="formAddUpdateAlbum:pblAlbums"></p:commandButton>							
 								</div>
 								
-								<p:dataTable id="tblAlbums" rows="20" paginator="true" emptyMessage="No se encontraron registros de albums..." 
+								<p:dataTable id="tblAlbums" widgetVar="tblAlbums" rows="20" paginator="true" emptyMessage="No se encontraron registros de albums..." 
 											 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							                 currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros" filteredValue="#{adminAlbumsController.albumsFiltrados}"
 							                 rowsPerPageTemplate="20,50,100" var="album" value="#{adminAlbumsController.albums}" paginatorPosition="bottom">
@@ -76,7 +76,16 @@
 											<p:outputLabel value="#{album.disquera.descripcion}"></p:outputLabel>
 									</p:column>
 									
-									<p:column headerText="Estatus" filterBy="#{album.estatus}" filterMatchMode="contains">
+									<p:column headerText="Estatus" filterBy="#{album.estatus}" filterMatchMode="exact">
+									
+											<f:facet name="filter">
+							                	<p:selectOneMenu onchange="PF('tblAlbums').filter()">
+							                    	<f:selectItem itemLabel="SELECCIONE" itemValue="#{null}" noSelectionOption="true" />
+							                    	<f:selectItem itemLabel="NO HABILITADO" itemValue="false"></f:selectItem>
+							                    	<f:selectItem itemLabel="HABILITADO" itemValue="true"></f:selectItem>
+							                	</p:selectOneMenu>
+							            	</f:facet>								
+									
 											<p:outputLabel value="HABILITADO" rendered="#{album.estatus}"></p:outputLabel>
 											<p:outputLabel value="NO HABILITADO" rendered="#{!album.estatus}"></p:outputLabel>
 									</p:column>

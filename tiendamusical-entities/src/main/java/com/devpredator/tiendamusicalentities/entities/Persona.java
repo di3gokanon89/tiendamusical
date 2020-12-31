@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 /**
  * @author DevPredator
  * Clase que representa entidades de personas que manejan el aplicativo.
@@ -27,7 +30,7 @@ public class Persona extends Common {
 	@Column(name = "idPersona")
 	private Long idPersona;
 	
-	@Column(name = "numeroIdentificacion", length = 12, nullable = false)
+	@Column(name = "numeroIdentificacion", length = 12)
 	private String numeroIdentificacion;
 	
 	@Column(name = "nombre", length = 100, nullable = false)
@@ -59,6 +62,7 @@ public class Persona extends Common {
 	@JoinColumn(name = "idRol")	
 	private Rol rol;
 
+	@Cascade(CascadeType.PERSIST)
 	@OneToOne(mappedBy = "persona")
 	private Carrito carrito;
 	

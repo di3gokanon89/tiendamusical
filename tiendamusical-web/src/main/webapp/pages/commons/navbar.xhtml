@@ -7,6 +7,7 @@
       
       <p:menubar id="menubar" style="background-color: black">
       	<f:facet name="options">
+      		<p:outputLabel value="Bienvenido: #{sessionBean.persona.usuario}" style="color: white"></p:outputLabel>
       		<p:commandButton id="btnShopping" icon="pi pi-shopping-cart" action="#{navBarController.redireccionar}" immediate="true" rendered="#{sessionBean.persona.rol.idRol == 4}">
       			<pe:badge content="#{sessionBean.persona.carrito.carritosAlbum.size()}" rendered="#{sessionBean.persona.carrito.carritosAlbum.size() > 0}"></pe:badge>
       		</p:commandButton>

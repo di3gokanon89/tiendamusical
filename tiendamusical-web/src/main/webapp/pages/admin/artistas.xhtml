@@ -36,7 +36,7 @@
 									<p:commandButton oncomplete="PF('dlgArtista').show()" value="Agregar" action="#{adminArtistasController.limpiarComponentes}" immediate="true" update="formAddUpdateArtista:pblArtistas"></p:commandButton>							
 								</div>
 								
-								<p:dataTable id="tblArtistas" rows="20" paginator="true" emptyMessage="No se encontraron registros de artistas..." 
+								<p:dataTable id="tblArtistas" widgetVar="tblArtistas" rows="20" paginator="true" emptyMessage="No se encontraron registros de artistas..." 
 											 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							                 currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros" filteredValue="#{adminArtistasController.artistasFiltrados}"
 							                 rowsPerPageTemplate="20,50,100" var="artista" value="#{adminArtistasController.artistas}" paginatorPosition="bottom">
@@ -66,7 +66,15 @@
 										<p:outputLabel value="#{artista.subGenero.descripcion}"></p:outputLabel>
 									</p:column>
 									
-									<p:column headerText="Estatus" filterBy="#{artista.estatus}" filterMatchMode="contains">
+									<p:column headerText="Estatus" filterBy="#{artista.estatus}" filterMatchMode="exact">
+											<f:facet name="filter">
+							                	<p:selectOneMenu onchange="PF('tblArtistas').filter()">
+							                    	<f:selectItem itemLabel="SELECCIONE" itemValue="#{null}" noSelectionOption="true" />
+							                    	<f:selectItem itemLabel="NO HABILITADO" itemValue="false"></f:selectItem>
+							                    	<f:selectItem itemLabel="HABILITADO" itemValue="true"></f:selectItem>
+							                	</p:selectOneMenu>
+							            	</f:facet>
+							            
 											<p:outputLabel value="HABILITADO" rendered="#{artista.estatus}"></p:outputLabel>
 											<p:outputLabel value="NO HABILITADO" rendered="#{!artista.estatus}"></p:outputLabel>
 									</p:column>
